@@ -1,11 +1,8 @@
 import collections
 import itertools
-import random
 
 COLORS = ["GREEN", "YELLOW", "WHITE", "BLACK", "BLUE", "RED"]
-COLORS_MAP = {"g": "GREEN", "y": "YELLOW", "w": "WHITE", "bk": "BLACK", "bu": "BLUE", "r": "RED"}
 NUM_PEGS_PER_ROW = 4
-DEBUG = False
 
 def create_all_possible_solutions():
     return list(itertools.product(COLORS, repeat=NUM_PEGS_PER_ROW))
@@ -33,33 +30,6 @@ def compare_rows(guess, solution):
 
 def parse_input(input_string):
     pass
-
-def play_game():
-    print("Enter moves as a comma separated string")
-    print("Possible keys %s" % COLORS_MAP)
-    print("Example: bk,bu,g,g")
-    solutions = list(create_all_possible_solutions())
-    solution = random.choice(solutions)
-    if DEBUG:
-        print(solution)
-    num_guesses = 0
-    while True:
-        print("Enter Move:")
-        move = raw_input()
-        parsed_move = move.strip().lower().split(",")
-        assert(len(parsed_move) == NUM_PEGS_PER_ROW)
-        move_tuple = tuple([COLORS_MAP[peg] for peg in parsed_move])
-        num_guesses += 1
-        num_blacks, num_whites = compare_rows(move_tuple, solution)
-        print("%s Black pegs and %s white pegs" %(num_blacks, num_whites))
-        if num_blacks == 4:
-            print("WOOHOO YOU WIN!!!")
-            break
-        if num_guesses >= 10:
-            print("YOU LOSE YOU DUMB FUCK")
-            break
-
-play_game()
 
 def test1():
     SOLUTION = ('GREEN', 'GREEN', 'GREEN', 'YELLOW')
