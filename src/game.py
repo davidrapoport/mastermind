@@ -1,5 +1,6 @@
 from board import create_all_possible_solutions, compare_rows, NUM_PEGS_PER_ROW
 from solver import Solver
+from ui import create_row
 import random
 
 COLORS_MAP = {"g": "GREEN", "y": "YELLOW", "w": "WHITE", "bk": "BLACK", "bu": "BLUE", "r": "RED"}
@@ -12,22 +13,24 @@ def play_simulation():
     solutions = list(create_all_possible_solutions())
     solution = random.choice(solutions)
     print("Solution is {}".format(solution))
-    while True:
-        if num_guesses == 0:
-            move =  ("GREEN", "GREEN", "YELLOW", "YELLOW")
-        else:
-            move = solver.pick_move()
-        print("Making move: {}".format(move))
-        num_blacks, num_whites = compare_rows(move, solution)
-        print("%s Black pegs and %s white pegs" %(num_blacks, num_whites))
-        if solver.has_won():
-            print("WOOHOOO!!!")
-            break
-        solver.make_move(move, num_blacks, num_whites)
-        num_guesses += 1
-        if num_guesses >= 10:
-            print("BAD ALGORITHM!!!")
-            break
+    with open("output.html", "w") as f:
+        while True:
+            if num_guesses == 0:
+                move =  ("GREEN", "GREEN", "YELLOW", "YELLOW")
+            else:
+                move = solver.pick_move()
+            print("Making move: {}".format(move))
+            num_blacks, num_whites = compare_rows(move, solution)
+            f.write(create_row(move, num_blacks, num_whites))
+            print("%s Black pegs and %s white pegs" %(num_blacks, num_whites))
+            if solver.has_won():
+                print("WOOHOOO!!!")
+                break
+            solver.make_move(move, num_blacks, num_whites)
+            num_guesses += 1
+            if num_guesses >= 10:
+                print("BAD ALGORITHM!!!")
+                break
 
 
 
